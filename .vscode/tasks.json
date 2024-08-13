@@ -1,0 +1,70 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Create snpe:v1.65 docker image",
+            "detail": "Create docker image for SNPE-v1.65",
+            "type": "shell",
+            "command": "docker build -t snpe:v1.65 .",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false,
+                "close": false
+            },
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Run snpe:v1.65 as a container",
+            "detail": "Run docker image as a container",
+            "type": "shell",
+            "command": "docker",
+            "args": [
+                "run",
+                "-dt",
+                "-v",
+                "${workspaceFolder}/android-ndk-r19c:/snpe-1.65/android-ndk-r19c:ro",
+                "-v",
+                "${workspaceFolder}/snpe-1.65.0.3676:/snpe-1.65/snpe-1.65.0.3676:ro",
+                "-v",
+                "${workspaceFolder}/scripts:/snpe-1.65/scripts:ro",
+                "-v",
+                "${input:data}:/snpe-1.65/data:rw",
+                "--name",
+                "snpe_v1.65",
+                "snpe:v1.65"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false,
+                "close": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "data",
+            "type": "promptString",
+            "description": "Enter folder that contains neural network model and raw-typed images",
+            "default": "${workspaceFolder}/data",
+            "password": false
+        }
+    ]
+}
